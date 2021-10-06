@@ -2,6 +2,9 @@
 double sigmoid(double);
 double diff_sigmoid(double);
 
+double tanh(double x);
+double diff_tanh(double x);
+
 double my_activate_func(double x);
 double my_diff_activate_func(double x); 
 

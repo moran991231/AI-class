@@ -87,34 +87,36 @@ void learning(int iteration) {
     double all_output[9], all_err[9];
     double err_sum=0.0;
     vector<double>* pout;
-#if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT||SUCCEEDED_PRINT
-    for (int i = 0; i < n; i++) {
-        my_network->forward(train_set[i], answer[i]);
-        pout = my_network->get_output();
-        all_output[i] = pout->at(1);
-        all_err[i] = my_network->error[1];
-        err_sum += all_err[i];
-    }
-#if OUTPUT_PRINT
-    print_output(all_output, n);
-#endif
-#if DECISION_OUTPUT_PRINT
-    print_decision_output(all_output, n);
-#endif
-#if ERR_PRINT
-    print_err(all_err, n);
-#endif
-#if ERR_SUM_PRINT
-    printf(" [err sum: %+6lf] ", err_sum);
-#endif
+    if (train_i == 0) {
+    #if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT||SUCCEEDED_PRINT
+        for (int i = 0; i < n; i++) {
+            my_network->forward(train_set[i], answer[i]);
+            pout = my_network->get_output();
+            all_output[i] = pout->at(1);
+            all_err[i] = my_network->error[1];
+            err_sum += all_err[i];
+        }
+    #if OUTPUT_PRINT
+        print_output(all_output, n);
+    #endif
+    #if DECISION_OUTPUT_PRINT
+        print_decision_output(all_output, n);
+    #endif
+    #if ERR_PRINT
+        print_err(all_err, n);
+    #endif
+    #if ERR_SUM_PRINT
+        printf(" [err sum: %+6lf] ", err_sum);
+    #endif
     
-#if SUCCEEDED_PRINT
-    print_succeeded(all_output, n);
-#endif
-#endif
+    #if SUCCEEDED_PRINT
+        print_succeeded(all_output, n);
+    #endif
+    #endif
+    printf("\n");
+    }
     my_network->forward(train_set[train_i], answer[train_i]);
     my_network->backward(train_set[train_i]);
-    printf("\n");
 }
 
 int main()
@@ -122,8 +124,8 @@ int main()
     init();
     //my_network->layers[0]->read_weight(" 0-th_layer_w.txt");
     //my_network->layers[1]->read_weight(" 1-th_layer_w.txt");
-
-    for (int i = 0; i < num_iter; i++) {
+    int n = gate_type <= 3 ? 4 : 9;
+    for (int i = 0; i < num_iter*n; i++) {
         learning(i);
     }
     //my_network->write_all_weight();

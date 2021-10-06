@@ -38,7 +38,7 @@ Layer::Layer(const Layer& copy_source)
 
 void Layer::perceptron_forward(vector<double> input,  int node_i)
 {
-    double temp = 0; 
+    double temp = 0.0; 
     for (int i = 0; i <= num_input; i++)
         temp += input[i] * weight[node_i][i];
      net[node_i] = temp;
@@ -47,9 +47,9 @@ void Layer::perceptron_forward(vector<double> input,  int node_i)
 
 void Layer::perceptron_backward(double dErr_dyi, vector<double> input, int node_i)
 {
-    double dErr_dNet = dErr_dyi * diff_activation_func(net[node_i]); 
+    double dErr_dNet = dErr_dyi * diff_activation_func(net[node_i]);
     for (int i = 0; i <= num_input; i++) {
-        del[i] += dErr_dNet * weight[node_i][i];
+        del[i] += dErr_dNet * weight[node_i][i];        
         weight[node_i][i] += -learning_rate* dErr_dNet * input[i];
     }
 }

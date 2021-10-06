@@ -2,14 +2,21 @@
 #include <math.h>
 #include "functions.h"
 double sigmoid(double x) { 
-    return 1/(1.0 + exp(-x));
+    return 1.0/(1.0 + exp(-x));
 }
 
 double diff_sigmoid(double x) {
     double sig_x = sigmoid(x);
-    return sig_x * (1 - sig_x);
+    return sig_x * (1.0 - sig_x);
 }
 
+double tanh(double x) {
+    return 2.0 / (1 + exp(-2.0 * x)) - 1.0;
+}
+double diff_tanh(double x) {
+    double tanh_x = tanh(x);
+    return 1 - tanh_x * tanh_x;
+}
 double ReLU(double x) {
     return (0.1 * x > x) ? 0.1 * x : x;
 }
@@ -19,10 +26,10 @@ double diff_ReLU(double x) {
 
 // -----------------------------------
 double my_activate_func(double x) { 
-    return ReLU(x);
+    return tanh(x);
 }
 double my_diff_activate_func(double x) {
-    return diff_ReLU(x);
+    return diff_tanh(x);
 }
 
 double my_loss_func(double target, double y) {

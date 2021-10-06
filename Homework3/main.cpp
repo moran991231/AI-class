@@ -8,36 +8,21 @@
 #include "functions.h"
 #include <fstream>
 
-#define ERR_PRINT 1
+#define ERR_PRINT 0
 #define OUTPUT_PRINT 1
 #define DECISION_OUTPUT_PRINT 1
 #define ERR_SUM_PRINT 1
 #define WEIGHT_PRINT 1
+#define SUCCEEDED_PRINT 1
 
 using namespace std;
 
 void print_output(double* all_out, int n);
 void print_decision_output(double* all_out, int n);
 void print_err(double* all_err, int n);
+void print_succeeded(double* all_out, int n);
 
-void print_output(double* all_out, int n) {
-    printf(" [out:");
-    for (int i = 0; i < n; i++)
-        printf(" %+6lf", all_out[i]);
-    printf("] ");
-}
-void print_decision_output(double* all_out, int n) {
-    printf(" [decision out:");
-    for (int i = 0; i < n; i++)
-        printf(" %d", (int)my_decision_func(all_out[i]));
-    printf("] ");
-}
-void print_err(double* all_err, int n) {
-    printf(" [err:");
-    for (int i = 0; i < n; i++)
-        printf(" %+6lf", all_err[i]);
-    printf("] ");
-}
+
 // global variables
 mt19937 mt_rand;
 vector<vector<double>> train_set({
@@ -102,7 +87,7 @@ void learning(int iteration) {
     double all_output[9], all_err[9];
     double err_sum=0.0;
     vector<double>* pout;
-#if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT
+#if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT||SUCCEEDED_PRINT
     for (int i = 0; i < n; i++) {
         my_network->forward(train_set[i], answer[i]);
         pout = my_network->get_output();
@@ -121,6 +106,10 @@ void learning(int iteration) {
 #endif
 #if ERR_SUM_PRINT
     printf(" [err sum: %+6lf] ", err_sum);
+#endif
+    
+#if SUCCEEDED_PRINT
+    print_succeeded(all_output, n);
 #endif
 #endif
     my_network->forward(train_set[train_i], answer[train_i]);
@@ -142,5 +131,30 @@ int main()
     delete my_network;
 }
 
- 
+void print_output(double* all_out, int n) {
+    printf(" [out:");
+    for (int i = 0; i < n; i++)
+        printf(" %+6lf", all_out[i]);
+    printf("] ");
+}
+void print_decision_output(double* all_out, int n) {
+    printf(" [decision out:");
+    for (int i = 0; i < n; i++)
+        printf(" %d", (int)my_decision_func(all_out[i]));
+    printf("] ");
+}
+void print_err(double* all_err, int n) {
+    printf(" [err:");
+    for (int i = 0; i < n; i++)
+        printf(" %+6lf", all_err[i]);
+    printf("] ");
+}
+
+void print_succeeded(double* all_out, int n) {
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+        if (my_decision_func(all_out[i]) == my_decision_func(answer[i][0]))
+            cnt++;
+    printf(" [%s] ", cnt == n ? "!SUCCEEDED!" : "FAILED");
+}
  

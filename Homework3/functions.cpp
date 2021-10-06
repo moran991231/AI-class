@@ -10,11 +10,11 @@ double diff_sigmoid(double x) {
     return sig_x * (1.0 - sig_x);
 }
 
-double tanh(double x) {
+double tanh_(double x) {
     return 2.0 / (1 + exp(-2.0 * x)) - 1.0;
 }
 double diff_tanh(double x) {
-    double tanh_x = tanh(x);
+    double tanh_x = tanh_(x);
     return 1 - tanh_x * tanh_x;
 }
 double ReLU(double x) {
@@ -26,7 +26,7 @@ double diff_ReLU(double x) {
 
 // -----------------------------------
 double my_activate_func(double x) { 
-    return tanh(x);
+    return tanh_(x);
 }
 double my_diff_activate_func(double x) {
     return diff_tanh(x);

@@ -12,7 +12,6 @@
 #define OUTPUT_PRINT 1
 #define DECISION_OUTPUT_PRINT 1
 #define ERR_SUM_PRINT 0
-#define WEIGHT_PRINT 1
 #define SUCCEEDED_PRINT 1
 
 using namespace std;
@@ -20,7 +19,7 @@ using namespace std;
 void print_output(double* all_out, int n);
 void print_decision_output(double* all_out, int n);
 void print_err(double* all_err, int n);
-void print_succeeded(double* all_out, int n);
+bool print_succeeded(double* all_out, int n);
 
 
 // global variables
@@ -77,18 +76,29 @@ void init() {
 
     mt_rand.seed(seed);
 
-    my_network = new Network(2, 1, 5,2, 2,2,2, 1);
+    my_network = new Network(2, 1, 2, 2, 1);
     my_network->init(lr, mt_rand);
 }
 
-void learning(int iteration) {
+void write_weight() {
+    cout << "\n Do you want to save weight? (n: no,  else: yes):  ";
+    char in;
+    cin >> in;
+    if (in == 'n' || in == 'N') return;
+    my_network->write_all_weight();
+
+}
+
+bool learning(int iteration) {
     int train_i = 0, n = gate_type <= 3 ? 4 : 9;
     train_i = iteration % n;
     double all_output[9], all_err[9];
     double err_sum = 0.0;
     vector<double>* pout;
+    bool ret = false;
     if (train_i == 0)
     {
+        printf("epoch: %4d ", iteration / n);
 #if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT||SUCCEEDED_PRINT
         for (int i = 0; i < n; i++) {
             my_network->forward(train_set[i], answer[i]);
@@ -111,13 +121,14 @@ void learning(int iteration) {
 #endif
 
 #if SUCCEEDED_PRINT
-        print_succeeded(all_output, n);
+        ret = print_succeeded(all_output, n);
 #endif
 #endif
         printf("\n");
     }
     my_network->forward(train_set[train_i], answer[train_i]);
     my_network->backward(train_set[train_i]);
+    return ret;
 }
 
 int main()
@@ -127,9 +138,9 @@ int main()
     //my_network->layers[1]->read_weight(" 1-th_layer_w.txt");
     int n = gate_type <= 3 ? 4 : 9;
     for (int i = 0; i < num_iter * n; i++) {
-        learning(i);
+        if (learning(i)) break;
     }
-    //my_network->write_all_weight();
+    write_weight();
 
     delete my_network;
 }
@@ -153,10 +164,11 @@ void print_err(double* all_err, int n) {
     printf("] ");
 }
 
-void print_succeeded(double* all_out, int n) {
+bool print_succeeded(double* all_out, int n) {
     int cnt = 0;
     for (int i = 0; i < n; i++)
         if (my_decision_func(all_out[i]) == (int)answer[i][0])
             cnt++;
     printf(" [%s] ", cnt == n ? "!SUCCEEDED!" : "FAILED");
+    return cnt == n;
 }

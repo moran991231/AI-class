@@ -11,29 +11,28 @@ public:
     vector<double> del, net, output;
     vector<vector <double>> weight;
 
-
     double (*activation_func)(double net);
     double (*diff_activation_func) (double net);
 
-
-    double (*loss_func)(double target, double y);
+    double (*loss_func)(double target, double y); // objective function
     double (*diff_loss_func) (double target, double y);
 
     Layer();
     Layer(int num_input, int num_node);
     Layer(const Layer& copy_source); // copy constructor
 
-    void feed_forward(vector<double> input);
-    void feed_backward(vector<double> input, vector<double> dErr_dy);
-
-    void apply_loss_func(vector<double> target, vector<double>& error, vector<double>& dErr_dy);
-
+    // util functions
     void set_weight_randomly(std::mt19937& mt);
     void print_weight();
     void read_weight(std::string filename);
     void write_weight(std::string filename);
 
-private: 
+    void feed_forward(vector<double> input);  // forward process for all nodes
+    void feed_backward(vector<double> input, vector<double> dErr_dy); // backward process for all nodes
+
+    void apply_loss_func(vector<double> target, vector<double>& error, vector<double>& dErr_dy);
+
+private: // a node (a perceptron)
     void perceptron_forward(vector<double> input,  int node_i);
     void perceptron_backward(double dErr_dy, vector<double> input, int node_i);
 };

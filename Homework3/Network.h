@@ -9,7 +9,7 @@ class Network
 public:
     int num_input, num_output, num_layer;
     vector<double>  error, dErr_dy;
-    vector<Layer *> layers;
+    vector<Layer *> layers; 
 
     Network();
     Network(int num_input, int num_output, int num_layer,int ...);
@@ -22,7 +22,6 @@ public:
 
     vector<double>*  get_output();
     void write_all_weight();
-
-
 };
+
 

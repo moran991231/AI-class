@@ -18,10 +18,10 @@ double diff_tanh(double x) {
     return 1 - tanh_x * tanh_x;
 }
 double ReLU(double x) {
-    return (0.1 * x > x) ? 0.1 * x : x;
+    return x >= 0.0 ? x : 0.0;
 }
 double diff_ReLU(double x) {
-    return (0.1 * x > x) ? 0.1 : 1;
+    return x >= 0 ? 1.0 : 0.0;
 }
 
 // -----------------------------------
@@ -35,7 +35,6 @@ double my_diff_activate_func(double x) {
 double my_loss_func(double target, double y) {
     return (y - target) * (y - target) / 2.0;
 }
-
 double my_diff_loss_func(double target, double y) {
     y =my_decision_func(y);
     return y - target;

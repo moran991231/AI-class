@@ -77,7 +77,7 @@ void init() {
 
     mt_rand.seed(seed);
 
-    my_network = new Network(2, 1, 4, 2,2,2, 1);
+    my_network = new Network(2, 1, 5,2, 2,2,2, 1);
     my_network->init(lr, mt_rand);
 }
 
@@ -87,7 +87,8 @@ void learning(int iteration) {
     double all_output[9], all_err[9];
     double err_sum = 0.0;
     vector<double>* pout;
-    if (train_i == 0) {
+    if (train_i == 0)
+    {
 #if OUTPUT_PRINT||DECISION_OUTPUT_PRINT||ERR_PRINT||ERR_SUM_PRINT||SUCCEEDED_PRINT
         for (int i = 0; i < n; i++) {
             my_network->forward(train_set[i], answer[i]);

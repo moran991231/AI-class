@@ -5,8 +5,8 @@
 using namespace std;
 class Layer
 {
-public: 
-    int num_input=0, num_node = 0; // input:0~num_input, node(output): 1~num_node
+public:
+    int num_input = 0, num_node = 0; // input:0~num_input, node(output): 1~num_node
     double learning_rate = 0.1;
     vector<double> del, net, output;
     vector<vector <double>> weight;
@@ -33,7 +33,7 @@ public:
     void apply_loss_func(vector<double> target, vector<double>& error, vector<double>& dErr_dy);
 
 private: // a node (a perceptron)
-    void perceptron_forward(vector<double> input,  int node_i);
+    void perceptron_forward(vector<double> input, int node_i);
     void perceptron_backward(double dErr_dy, vector<double> input, int node_i);
 };
 

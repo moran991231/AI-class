@@ -387,3 +387,4 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 winequality-white.csv
+/dataset/
